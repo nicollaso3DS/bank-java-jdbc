@@ -56,7 +56,7 @@ public class Conta {
     }
 
     public BigDecimal getSaldo() {
-        return saldo;
+        return this.saldo;
     }
 
     public Cliente getTitular() {
