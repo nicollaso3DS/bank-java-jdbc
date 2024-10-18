@@ -33,14 +33,30 @@ public class ContaService {
         }
         conta.sacar(valor);
     }
-    public void realizarDeposito(Integer numeroDaConta, BigDecimal valor) { }
-    public void realizaTransferencia(Integer numeroContaOrigem, Integer numeroContaDestino, BigDecimal valor){ }
-    public void encerrar(Integer numeroDaConta) { }
-    private Conta buscarContaPorNumero(Integer numero) { return null;}
-    private void alterar(Integer numeroDaConta, BigDecimal valor) { }
+    public void realizarDeposito(Integer numeroDaConta, BigDecimal valor) {
+        var conta = buscarContaPorNumero(numeroDaConta);
+        if (valor.compareTo(BigDecimal.ZERO) <= 0){
+            throw new RegraDeNegocioException("Valor do deposito deve ser superior a zero !");
+        }
+        conta.depositar(valor);
+    }
+    public void encerrar(Integer numeroDaConta) {
+        var conta = buscarContaPorNumero(numeroDaConta);
+        if (conta.possuiSaldo()){
+            throw new RegraDeNegocioException("Conta não pode ser encerrada pois ainda possui saldo! ");
+        }
+        contas.remove(conta);
+    }
+    private Conta buscarContaPorNumero(Integer numero) {
+        return contas
+                .stream()
+                .filter(c -> c.getNumero() == numero)
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Não existe conta cadastrada com esse numero!"));
+    }
 
 
-    
+
 }
 
 
